@@ -1,0 +1,1 @@
+srun --time=05:00 --pty python3 test_moe.py # For testing and benchmarking

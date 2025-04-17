@@ -1,0 +1,1 @@
+rm -rf __pycache__ install *.so *.egg-info build

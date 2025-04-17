@@ -1,0 +1,1 @@
+srun --time=05:00 --pty python3 setup.py develop --install-dir ./install
