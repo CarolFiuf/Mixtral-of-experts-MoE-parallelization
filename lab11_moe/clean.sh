@@ -1,1 +1,1 @@
-rm -rf __pycache__ install *.so *.egg-info build
+rm -rf __pycache__ install *.so *.egg-info build */*_hip.cpp

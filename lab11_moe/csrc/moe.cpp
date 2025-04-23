@@ -5,6 +5,15 @@
 
 // TODO: Define more functions here
 
+// Here is an example of a SiLU kernel
+// You should optimize this kernel for your use case
+__global__ void SiLU(float *x, float *y, int size) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < size) {
+        y[idx] = x[idx] / (1 + exp(-x[idx]));
+    }
+}
+
 // TODO: Optimize this function
 torch::Tensor launch_custom_moe(
     torch::Tensor hidden_states, torch::Tensor w1, torch::Tensor w2,
@@ -20,7 +29,6 @@ torch::Tensor launch_custom_moe(
     auto out = torch::zeros({token_num, topk, model_dim}, hidden_states.dtype()).to(hidden_states.device());
 
     // TODO: This part should not be implemented with Pytorch
-    
     // TODO: Write kernel(s) for this part
     for (int E_id=0;E_id<expert;E_id++){
         auto mask = (topk_ids == E_id);
@@ -28,7 +36,16 @@ torch::Tensor launch_custom_moe(
             auto sub_tokens = hidden_states.masked_select(mask.unsqueeze(-1)).view({-1, model_dim});
             auto act_input = sub_tokens.matmul(w1[E_id].transpose(0, 1));
             auto gate_up = act_input.split({inter_dim, inter_dim}, -1);
-            auto act_out = torch::silu(gate_up[0]).mul(gate_up[1]);
+
+            // auto act_out = torch::silu(gate_up[0]).mul(gate_up[1]);
+            
+            // This code is equivalent to the above line
+            // but uses a custom SiLU kernel instead of PyTorch's built-in function
+            torch::Tensor silu_gate = torch::empty_like(gate_up[0]);
+            SiLU<<<(gate_up[0].numel() + 255) / 256, 256>>>(
+                gate_up[0].contiguous().data_ptr<float>(), silu_gate.data_ptr<float>(), gate_up[0].numel());
+            auto act_out = silu_gate.mul(gate_up[1]);
+
             out.masked_scatter_(mask.unsqueeze(-1), act_out.matmul(w2[E_id].transpose(0, 1)));
         }
     }
