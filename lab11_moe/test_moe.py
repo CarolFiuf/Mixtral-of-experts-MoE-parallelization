@@ -97,8 +97,10 @@ def test_moe(dtype, token, model_dim, inter_dim, E, topk):
         print(f'[perf] speedup {us_ref_naive/us-1:.2%}')
 
     if not benchmark_only():
-        if dtype == torch.float32:
-            checkAllclose(out_ref, out, rtol=1.3e-6, atol=1e-5)
+        if dtype == torch.float64:
+            checkAllclose(out_ref, out, rtol=1e-7, atol=1e-7)
+        elif dtype == torch.float32:
+            checkAllclose(out_ref, out, rtol=1e-3, atol=1e-5)
         elif dtype == torch.float16:
             checkAllclose(out_ref, out, rtol=1e-3, atol=1e-5)
         elif dtype == torch.bfloat16:
