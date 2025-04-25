@@ -1,1 +1,1 @@
-BENCHMARK_ONLY=1 srun --time=05:00 --pty python3 test_moe.py # For benchmarking
+BENCHMARK_ONLY=1 srun --time=05:00 --pty --gres=gpu:1 python3 test_moe.py # For benchmarking

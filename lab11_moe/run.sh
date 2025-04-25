@@ -1,1 +1,1 @@
-srun --time=05:00 --pty python3 test_moe.py # For testing and benchmarking
+srun --time=05:00 --pty --gres=gpu:1 python3 test_moe.py # For testing and benchmarking

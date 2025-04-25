@@ -142,7 +142,7 @@ def checkAllclose(a, b, rtol=1e-2, atol=1e-2, msg='', printNum=8):
     percent = num/a.numel()
     delta = (a-b)[mask]
 
-    if percent < 5:
+    if percent < 0.05:
         print(f'{msg}[checkAllclose {atol=} {rtol=} passed~]')
         return True
     else:
@@ -150,7 +150,7 @@ def checkAllclose(a, b, rtol=1e-2, atol=1e-2, msg='', printNum=8):
         printNum = min(printNum, num)
         percent = num/a.numel()
         delta = (a-b)[mask]
-        if percent > 5:
+        if percent > 0.05:
             print(f'''{msg}[checkAllclose {atol=} {rtol=} failed!]
     a    : {a.shape}
            {a[mask][:printNum]}

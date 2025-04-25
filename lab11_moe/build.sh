@@ -1,1 +1,1 @@
-srun --time=05:00 --pty python3 setup.py develop --install-dir ./install
+srun --time=05:00 --pty --gres=gpu:0 python3 setup.py develop --install-dir ./install
