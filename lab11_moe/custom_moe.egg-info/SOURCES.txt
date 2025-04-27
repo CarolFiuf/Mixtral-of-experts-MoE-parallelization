@@ -1,0 +1,8 @@
+README.md
+setup.py
+csrc/moe.cpp
+csrc/moe_hip.cpp
+custom_moe.egg-info/PKG-INFO
+custom_moe.egg-info/SOURCES.txt
+custom_moe.egg-info/dependency_links.txt
+custom_moe.egg-info/top_level.txt
